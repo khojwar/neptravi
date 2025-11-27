@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from './ui/button'
+import LanguageToggle from './LanguageToggle';
 
 
 const Navbar = () => {
@@ -32,7 +33,7 @@ const Navbar = () => {
             ))}
         </ul>
         <div className='flex items-center gap-8'>
-            <div>De En</div>
+            <div> <LanguageToggle /> </div>
             <Button variant={'custom'}>Login</Button>
         </div>
     </div>
