@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { geistSans, geistMono, poppins } from "./fonts";
+// import { geistSans, geistMono, poppins } from "./fonts";
+import {Poppins } from "next/font/google";
+import Navbar from "@/components/Navbar";
 
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,8 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} antialiased font-sans` }
       >
+        <Navbar />
         {children}
       </body>
     </html>

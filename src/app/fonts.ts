@@ -13,10 +13,10 @@ export const geistMono = Geist_Mono({
 export const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400"],
 });
 
 export const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: ['400'],
 });
