@@ -1,8 +1,7 @@
-import React from 'react'
 
 const HowItWorks = () => {
   return (
-    <div className='flex gap-4 h-screen'>
+    <div className='flex gap-4 h-screen md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 mx-2'>
         <div className='w-1/2 rounded-3xl overflow-hidden shadow-xl'>
             <img src="narayani beach.jpg" alt="narayani beach" />
         </div>

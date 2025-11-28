@@ -1,4 +1,4 @@
-// components/LanguageToggle.jsx
+
 "use client";
 import { useState } from "react";
 
