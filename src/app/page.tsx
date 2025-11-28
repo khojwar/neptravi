@@ -6,7 +6,9 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <BestLocation />
+      <div className="lg:mx-48 md:my-32 mx-6 my-12">
+          <BestLocation />
+      </div>
     </>
   );
 }
