@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const BestLocation = () => {
   return (
@@ -14,8 +14,8 @@ const BestLocation = () => {
             <div className="md:col-span-2 relative rounded-3xl overflow-hidden shadow-xl">
                 <img src="/kathmandu.jpg" className="w-full h-80 md:h-96 object-cover " />
                 <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <p className="text-sm opacity-80">Bromo, East Java</p>
-                    <h2 className="text-2xl font-semibold">Bromo Tengger Tour</h2>
+                    <p className="text-sm opacity-80">Lalitpur, Nepal</p>
+                    <h2 className="text-2xl font-semibold">Paten Durbar Square</h2>
                 </div>
             </div>
 
@@ -23,8 +23,8 @@ const BestLocation = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-xl">
                 <img src="/muktinath.jpg" className="w-full h-80 md:h-96 object-cover" />
                 <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <p className="text-sm opacity-80">Denpasar, Bali</p>
-                    <h2 className="text-xl font-semibold">Bali Beach Tourism</h2>
+                    <p className="text-sm opacity-80">Muktinath, Nepal</p>
+                    <h2 className="text-xl font-semibold">Muktinath Temple</h2>
                 </div>
             </div>
 
@@ -32,8 +32,8 @@ const BestLocation = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-xl">
                 <img src="/pokhara.jpg" className="w-full h-80 md:h-96 object-cover" />
                 <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <p className="text-sm opacity-80">Lampung, South Sumatra</p>
-                    <h2 className="text-xl font-semibold">Sumatra Tourism</h2>
+                    <p className="text-sm opacity-80">Pokhara, Nepal</p>
+                    <h2 className="text-xl font-semibold">Phewa Lake</h2>
                 </div>
             </div>
 
@@ -41,8 +41,8 @@ const BestLocation = () => {
             <div className="md:col-span-2 relative rounded-3xl overflow-hidden shadow-xl">
                 <img src="/rhino.jpg" className="w-full h-80 md:h-96 object-cover" />
                 <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <p className="text-sm opacity-80">Jogjakarta, Central Java</p>
-                    <h2 className="text-2xl font-semibold">Borobudur Temple Tour</h2>
+                    <p className="text-sm opacity-80">Chitwan, Nepal</p>
+                    <h2 className="text-2xl font-semibold">Chitwan National Park</h2>
                 </div>
             </div>
 

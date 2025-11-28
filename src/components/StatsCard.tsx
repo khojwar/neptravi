@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const StatsCard = ({ number, label }: { number: string | number; label: string }) => {
   return (
