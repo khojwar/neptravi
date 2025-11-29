@@ -32,8 +32,8 @@ const howitworkdata = [
 
 const HowItWorks = () => {
   return (
-    <div className='flex gap-8 min-h-screen md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 md:pt-0 lg:pt-32 mx-2'>
-      <div className='w-1/2 rounded-xl overflow-hidden shadow-xl relative h-screen'>
+    <div className='flex flex-col md:flex-row gap-8 min-h-screen md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 md:pt-0 lg:pt-32 mx-2'>
+      <div className='md:w-1/2 rounded-xl overflow-hidden shadow-xl relative h-96 md:h-[38rem] lg:h-[44rem] '>
           <Image
             src={'/narayani%20beach.jpg'}
             alt="narayani beach"
@@ -48,7 +48,7 @@ const HowItWorks = () => {
             <p className="text-white pt-4 text-sm">Embark on the journey to find your dream destination. where adventure and relaxtation await, creating unforgattable memories along the way. </p>
           </div>
         </div>
-        <div className='w-1/2 px-4 flex flex-col justify-start items-start gap-6'>
+        <div className='md:w-1/2 px-4 flex flex-col justify-start items-start lg:gap-6'>
             <p className='text-gray-600/50'>How It Works</p>
             <h1 className="text-3xl font-semibold">One click for you</h1>
             {howitworkdata.map((item) => (
