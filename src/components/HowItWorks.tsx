@@ -1,5 +1,7 @@
 import HowItWorksCard from "./HowItWorksCard"
 import { MapPin, Ticket, CreditCard, Globe } from "lucide-react";
+import Image from "next/image";
+import FilterSearch from "./FilterSearch";
 
 const howitworkdata = [
   {
@@ -31,10 +33,22 @@ const howitworkdata = [
 const HowItWorks = () => {
   return (
     <div className='flex gap-8 min-h-screen md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 md:pt-0 lg:pt-32 mx-2'>
-        <div className='w-1/2 rounded-3xl overflow-hidden shadow-xl '>
-            <img src="narayani beach.jpg" alt="narayani beach" />
+      <div className='w-1/2 rounded-xl overflow-hidden shadow-xl relative h-screen'>
+          <Image
+            src={'/narayani%20beach.jpg'}
+            alt="narayani beach"
+            fill
+            className='object-cover '
+            priority
+          />
+          <div className="absolute bottom-8 left-8 right-8 z-50">
+            <div className="max-w-full">
+              <FilterSearch textInfo="text-sm rounded-3xl pl-4" />
+            </div>
+            <p className="text-white pt-4 text-sm">Embark on the journey to find your dream destination. where adventure and relaxtation await, creating unforgattable memories along the way. </p>
+          </div>
         </div>
-        <div className='w-1/2 px-4 flex flex-col justify-start items-start'>
+        <div className='w-1/2 px-4 flex flex-col justify-start items-start gap-6'>
             <p className='text-gray-600/50'>How It Works</p>
             <h1 className="text-3xl font-semibold">One click for you</h1>
             {howitworkdata.map((item) => (
