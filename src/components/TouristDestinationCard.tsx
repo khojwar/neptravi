@@ -22,7 +22,7 @@ const TouristDestinationCard = ({photo, days, rating, from, to, packages}: Touri
           priority
         />
         <div className="absolute bottom-4 left-2 right-2 z-50">
-          <div className="flex flex-col justify-between min-h-full h-[47vh] lg:h-[67vh] text-white">
+          <div className="flex flex-col justify-between min-h-full h-[47vh] lg:h-[65vh] text-white">
             <div className="flex justify-between ">
               <div className="bg-gray-600/50 px-4 py-1 rounded-2xl">{days} days</div>
               <div className="bg-gray-600/50 px-4 py-1 rounded-2xl flex gap-2"> <span className="text-yellow-400"><Star /></span> {rating}</div>
