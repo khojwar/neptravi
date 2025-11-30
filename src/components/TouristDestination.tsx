@@ -31,31 +31,31 @@ const TouristDestinationData = [
 const TouristDestination = () => {
     return (
         <div className='md:max-w-3xl lg:max-w-7xl mx-auto py-16 flex flex-col gap-8'>
-        <div>
-            <p className="mb-2 text-gray-600/50">Tour packages</p>
-            <div className="flex gap-4">
-                <h1 className="text-5xl font-semibold w-1/2">Our tourist destination</h1>
-                <p className="w-1/2 text-lg text-gray-600/50">Our tourist destination offer an unrivaled blend of natural beauty and cultural richness </p>
+            <div className="mx-2">
+                <p className="mb-2 text-gray-600/50">Tour packages</p>
+                <div className="flex gap-4">
+                    <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold md:w-1/2">Our tourist destination</h1>
+                    <p className="md:w-1/2 text-sm md:text-lg text-gray-600/50">Our tourist destination offer an unrivaled blend of natural beauty and cultural richness </p>
+                </div>
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                {TouristDestinationData.map((item, index) => (
+                    <TouristDestinationCard 
+                        key={index}
+                        photo={item.photo}
+                        days={item.days}
+                        rating={item.rating}
+                        from={item.from}
+                        to={item.to}
+                        packages={item.package}
+                    />
+                ))}
+            </div>
+
+            <div className="flex justify-center">
+                <Button >View more</Button>
             </div>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-            {TouristDestinationData.map((item, index) => (
-                <TouristDestinationCard 
-                    key={index}
-                    photo={item.photo}
-                    days={item.days}
-                    rating={item.rating}
-                    from={item.from}
-                    to={item.to}
-                    packages={item.package}
-                />
-            ))}
-        </div>
-
-        <div className="flex justify-center">
-            <Button >View more</Button>
-        </div>
-    </div>
   )
 }
 
