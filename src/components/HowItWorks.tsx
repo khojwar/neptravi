@@ -32,8 +32,8 @@ const howitworkdata = [
 
 const HowItWorks = () => {
   return (
-    <div className='flex flex-col md:flex-row gap-8 min-h-screen md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 md:pt-0 lg:pt-32 mx-2'>
-      <div className='md:w-1/2 rounded-xl overflow-hidden shadow-xl relative h-96 md:h-[38rem] lg:h-[44rem] '>
+    <div className='flex flex-col md:flex-row gap-8 h-full md:h-[38rem] lg:h-[50rem] md:max-w-3xl lg:max-w-7xl md:mx-auto pt-32 md:pt-0 lg:pt-32 mx-2'>
+        <div className='w-full md:w-6/10 lg:w-1/2 rounded-xl overflow-hidden shadow-xl relative  '>
           <Image
             src={'/narayani%20beach.jpg'}
             alt="narayani beach"
@@ -41,14 +41,14 @@ const HowItWorks = () => {
             className='object-cover '
             priority
           />
-          <div className="absolute bottom-8 left-8 right-8 z-50">
+          <div className="absolute bottom-8 left-8 right-8 md:bottom-8 md:left-2 md:right-2 lg:bottom-8 lg:left-8 lg:right-8 z-50">
             <div className="max-w-full">
               <FilterSearch textInfo="text-sm rounded-3xl pl-4" />
             </div>
             <p className="text-white pt-4 text-sm">Embark on the journey to find your dream destination. where adventure and relaxtation await, creating unforgattable memories along the way. </p>
           </div>
         </div>
-        <div className='md:w-1/2 px-4 flex flex-col justify-start items-start lg:gap-6'>
+        <div className='md:w-4/10 lg:w-1/2 lg:px-4 flex flex-col justify-start items-start lg:gap-6'>
             <p className='text-gray-600/50'>How It Works</p>
             <h1 className="text-3xl font-semibold">One click for you</h1>
             {howitworkdata.map((item) => (
