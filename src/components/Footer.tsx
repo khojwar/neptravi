@@ -1,10 +1,18 @@
-import React from 'react'
 import { Button } from './ui/button'
 import { Facebook, Instagram, Mail, Youtube } from 'lucide-react'
+import Link from 'next/link';
 
 const Footer = () => {
+
+    const socialLinks = [
+        { icon: <Instagram className='text-white' />, url: 'https://www.instagram.com' },
+        { icon: <Facebook className='text-white' />, url: 'https://www.facebook.com' },
+        { icon: <Youtube className='text-white' />, url: 'https://www.youtube.com' },
+    ];
+
+
   return (
-    <div className='flex flex-col py-16 bg-black text-white px-8 lg:px-32 text-sm my-16'>
+    <div className='flex flex-col py-16 bg-black text-white px-8 lg:px-32 text-sm mt-16'>
         <div className='flex flex-col lg:flex-row gap-16 justify-between items-start'>
             <div className='flex justify-between w-full lg:w-1/2'>
                 <div className='flex flex-col gap-8'>
@@ -51,9 +59,11 @@ const Footer = () => {
                     <Button>Subscribe</Button> 
                 </div>
                 <div className='flex justify-end pt-8 gap-4'>
-                    <p className='flex justify-center items-center h-8 w-8 p-2 rounded-full bg-gray-300/50'><Instagram className='text-white' /></p>
-                    <p className='flex justify-center items-center h-8 w-8 p-2 rounded-full bg-gray-300/50'><Facebook className='text-white' /></p>
-                    <p className='flex justify-center items-center h-8 w-8 p-2 rounded-full bg-gray-300/50'><Youtube className='text-white' /></p>
+                    {socialLinks.map((link, index) => (
+                        <Link key={index} href={link.url} target="_blank" rel="noopener noreferrer" className='flex justify-center items-center h-8 w-8 p-2 rounded-full bg-gray-300/50'>
+                            {link.icon}
+                        </Link>
+                    ))}
                 </div>
             </div>
         </div>

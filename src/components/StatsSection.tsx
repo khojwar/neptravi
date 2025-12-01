@@ -2,7 +2,7 @@ import StatsCard from './StatsCard'
 
 const StatsSection = () => {
   return (
-    <div className='grid grid-cols-4 gap-4'>
+    <div className='grid grid-cols-4 gap-2 md:gap-4 mx-2'>
         <StatsCard number="10M+" label="Total Customers" />
         <StatsCard number="09+" label="Years Of Experience" />
         <StatsCard number="12K" label="Total Destinations" />

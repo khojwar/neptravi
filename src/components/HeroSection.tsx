@@ -3,7 +3,7 @@ import StatsSection from './StatsSection'
 
 const HeroSection = () => {
   return (
-    <div className='bg-cover bg-center rounded-2xl bg-no-repeat m-2 bg-[url("/eberhardgross.jpg")] '>
+    <div className='bg-cover bg-center rounded-2xl bg-no-repeat m-2 px-2 bg-[url("/eberhardgross.jpg")] '>
       <div className='flex flex-col'>
           <div className='flex flex-col justify-center items-center text-white gap-4 max-w-4xl mx-auto text-center h-screen '>
               <h1 className='text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-medium'>Extraordinary natural and cultural charm</h1>
