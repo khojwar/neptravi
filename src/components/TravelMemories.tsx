@@ -9,8 +9,8 @@ const TravelMemories = () => {
             <h1 className='text-3xl font-semibold'>Our travel memories</h1>
         </div>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <TravelMemoriesCard />
-            <TravelMemoriesCard />
+            <TravelMemoriesCard imageLink="/patan.jpg" />
+            <TravelMemoriesCard imageLink="/boudhanath.jpg" />
         </div>
         <div className="flex justify-center">
             <Button >View more</Button>

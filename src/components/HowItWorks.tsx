@@ -32,7 +32,7 @@ const howitworkdata = [
 
 const HowItWorks = () => {
   return (
-    <div className='flex flex-col md:flex-row gap-8 md:h-[44rem] md:max-w-3xl lg:max-w-7xl md:mx-auto my-16 md:my-4 lg:mt-32 lg:mb-16 mx-2'>
+    <div className='flex flex-col mx-2 md:flex-row gap-8 md:h-[44rem] md:max-w-3xl lg:max-w-7xl md:mx-auto my-16 md:my-4 lg:mt-32 lg:mb-16 '>
       <div className='w-full md:w-3/5 lg:w-1/2 rounded-xl overflow-hidden shadow-xl relative h-[32rem] md:h-[44rem] '>
           <Image
             src={'/narayani%20beach.jpg'}
@@ -41,7 +41,7 @@ const HowItWorks = () => {
             className='object-cover '
             priority
           />
-          <div className="absolute bottom-8 left-8 right-8 md:bottom-8 md:left-2 md:right-2 lg:bottom-8 lg:left-8 lg:right-8 z-50">
+          <div className="absolute bottom-8 left-4 right-4  md:left-2 md:right-2 lg:bottom-8 lg:left-8 lg:right-8 z-50">
             <div className="max-w-full">
               <FilterSearch textInfo="text-sm rounded-3xl pl-4" />
             </div>

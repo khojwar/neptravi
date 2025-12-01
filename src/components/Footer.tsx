@@ -1,6 +1,7 @@
 import { Button } from './ui/button'
 import { Facebook, Instagram, Mail, Youtube } from 'lucide-react'
 import Link from 'next/link';
+import EmailSubscribe from './EmailSubscribe';
 
 const Footer = () => {
 
@@ -12,7 +13,7 @@ const Footer = () => {
 
 
   return (
-    <div className='flex flex-col py-16 bg-black text-white px-8 lg:px-32 text-sm mt-16'>
+    <div className='flex flex-col py-16 bg-black text-white px-4 md:px-8 lg:px-32 text-sm mt-16'>
         <div className='flex flex-col lg:flex-row gap-16 justify-between items-start'>
             <div className='flex justify-between w-full lg:w-1/2'>
                 <div className='flex flex-col gap-8'>
@@ -49,15 +50,10 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col gap-8 lg:w-1/2 text-gray-300/50'>
+            <div className='flex flex-col gap-8 lg:w-1/2 text-gray-300/50  '>
                 <h1 className='text-lg text-white'>Newsletter</h1>
                 <p>Don't miss out on the exciting world of travel - subscribe now and embark on a journey of discovery with us</p>
-                <div className='text-white flex justify-between items-center p-2 rounded-4xl overflow-hidden px-2 shadow-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]'>
-                    <div className='flex items-center gap-2 pl-4'>
-                        <Mail /> Enter your email
-                    </div> 
-                    <Button>Subscribe</Button> 
-                </div>
+                <EmailSubscribe />
                 <div className='flex justify-end pt-8 gap-4'>
                     {socialLinks.map((link, index) => (
                         <Link key={index} href={link.url} target="_blank" rel="noopener noreferrer" className='flex justify-center items-center h-8 w-8 p-2 rounded-full bg-gray-300/50'>

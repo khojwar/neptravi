@@ -33,7 +33,7 @@ const TouristDestination = () => {
         <div className='md:max-w-3xl lg:max-w-7xl mx-auto py-16 flex flex-col gap-8'>
             <div className="mx-2">
                 <p className="mb-2 text-gray-600/50">Tour packages</p>
-                <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row gap-4">
                     <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold md:w-1/2">Our tourist destination</h1>
                     <p className="md:w-1/2 text-sm md:text-lg text-gray-600/50">Our tourist destination offer an unrivaled blend of natural beauty and cultural richness </p>
                 </div>

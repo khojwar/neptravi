@@ -1,12 +1,12 @@
 import Image from "next/image"
 
-const TravelMemoriesCard = () => {
+const TravelMemoriesCard = ({imageLink}) => {
   return (
     <div>
       <div className='flex flex-col gap-4'>
           <div className="relative w-full h-80 rounded-md overflow-hidden">
             <Image
-              src={'/boudhanath.jpg'}
+              src={imageLink}
               alt={'Boudhanath Stupa'}
               fill
               className="object-cover"
