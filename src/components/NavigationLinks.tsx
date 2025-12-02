@@ -8,15 +8,24 @@ const navItems = [
     { id: 'contact', label: 'Contact' }
 ];
 
-export function NavigationLinks({ onClick, activeSection }: { onClick?: () => void, activeSection?: string }) {
+interface Props {
+  activeSection?: string;
+  onLinkClick?: (id: string) => void;
+  className?: string; 
+}
+
+export function NavigationLinks({ activeSection, onLinkClick, className }: Props) {
   return (
     <>
       {navItems.map((item) => (
         <Link
           key={item.id}
           href={`#${item.id}`}
-          onClick={onClick}
-          className={`cursor-pointer hover:text-white px-3 py-2 text-sm font-medium transition ${activeSection === item.id ? 'text-white' : 'text-gray-300'}`}
+          onClick={() => onLinkClick?.(item.id)}
+          className={`cursor-pointer px-3 py-2 text-sm font-medium transition 
+          hover:text-white 
+          ${activeSection === item.id ? "text-white" : "text-gray-300"}
+          ${className ?? ""}`}
         >
           {item.label}
         </Link>
