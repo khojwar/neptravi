@@ -2,7 +2,7 @@
 
 const BestLocation = () => {
   return (
-    <div className="mx-2 md:max-w-3xl lg:max-w-7xl md:mx-auto min-h-screen pt-32">
+    <div id="bestLocation" className="mx-2 md:max-w-3xl lg:max-w-7xl md:mx-auto min-h-screen pt-32">
         <p className='text-gray-600 md:text-lg'>Best location</p>
         <div className='flex flex-col md:flex-row justify-between mb-8 mt-2 gap-2 md:gap-8'>
             <h1 className='text-2xl md:text-4xl lg:w-2/5 font-semibold whitespace-nowrap '>Nepali tourism</h1>

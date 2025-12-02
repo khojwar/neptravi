@@ -32,7 +32,7 @@ const howitworkdata = [
 
 const HowItWorks = () => {
   return (
-    <div className='flex flex-col mx-2 md:flex-row gap-8 md:h-[44rem] md:max-w-3xl lg:max-w-7xl md:mx-auto my-16 md:my-4 lg:mt-32 lg:mb-16 '>
+    <div id="services" className='flex flex-col mx-2 md:flex-row gap-8 md:h-[44rem] md:max-w-3xl lg:max-w-7xl md:mx-auto my-16 md:my-4 lg:mt-32 lg:mb-16 '>
       <div className='w-full md:w-3/5 lg:w-1/2 rounded-xl overflow-hidden shadow-xl relative h-[32rem] md:h-[44rem] '>
           <Image
             src={'/narayani%20beach.jpg'}

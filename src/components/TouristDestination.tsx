@@ -30,7 +30,7 @@ const TouristDestinationData = [
 
 const TouristDestination = () => {
     return (
-        <div className='md:max-w-3xl lg:max-w-7xl mx-auto py-16 flex flex-col gap-8'>
+        <div id="tour" className='md:max-w-3xl lg:max-w-7xl mx-auto py-16 flex flex-col gap-8'>
             <div className="mx-2">
                 <p className="mb-2 text-gray-600/50">Tour packages</p>
                 <div className="flex flex-col md:flex-row gap-4">

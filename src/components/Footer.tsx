@@ -1,4 +1,3 @@
-import { Button } from './ui/button'
 import { Facebook, Instagram, Mail, Youtube } from 'lucide-react'
 import Link from 'next/link';
 import EmailSubscribe from './EmailSubscribe';
@@ -13,7 +12,7 @@ const Footer = () => {
 
 
   return (
-    <div className='flex flex-col py-16 bg-black text-white px-4 md:px-8 lg:px-32 text-sm mt-16'>
+    <div id='contact' className='flex flex-col py-16 bg-black text-white px-4 md:px-8 lg:px-32 text-sm mt-16'>
         <div className='flex flex-col lg:flex-row gap-16 justify-between items-start'>
             <div className='flex justify-between w-full lg:w-1/2'>
                 <div className='flex flex-col gap-8'>

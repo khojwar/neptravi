@@ -3,7 +3,7 @@ import { AvatarDemo } from './Avatar'
 
 const Testimonial = () => {
   return (
-    <div className=' md:max-w-3xl lg:max-w-7xl mx-auto px-2 md:px-0 py-8 md:py-16 flex flex-col  md:flex-row gap-8'>
+    <div id='testimonial' className=' md:max-w-3xl lg:max-w-7xl mx-auto px-2 md:px-0 py-8 md:py-16 flex flex-col  md:flex-row gap-8'>
         <div className='flex flex-col justify-between items-start gap-8 md:w-1/3'>
             <div className='flex gap-4 md:gap-2'>
                 <AvatarDemo />

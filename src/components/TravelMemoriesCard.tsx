@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-const TravelMemoriesCard = ({imageLink}) => {
+const TravelMemoriesCard = ({imageLink}: {imageLink: string}) => {
   return (
     <div>
       <div className='flex flex-col gap-4'>
