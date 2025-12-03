@@ -21,7 +21,7 @@ return (
       </h1>
 
       {/* Desktop Navigation */}
-      <ul className='hidden md:flex gap-4 border-white border-t-2 bg-gray-600/50 bg-opacity-50 shadow-md rounded-4xl md:py-2 md:px-8 md:ml-16 lg:ml-20'>
+      <ul className='hidden md:flex gap-4 border-white border-t-2 bg-gray-600/50 bg-opacity-50 shadow-md rounded-4xl md:py-2 md:px-4 md:ml-16 lg:ml-20'>
         <NavigationLinks 
           activeSection={activeSection}
           onLinkClick={setActiveSection}
