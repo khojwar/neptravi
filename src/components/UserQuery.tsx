@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
+import { generateFullItineraryWithLLM } from "@/lib/generateFullItineraryWithLLM";
+import { extractTripDetailsWithLLM } from "@/lib/extractTripDetailsWithLLM";
 
 
 const userQuerySchema = z.object({
@@ -17,19 +20,71 @@ type userQueryData = z.infer<typeof userQuerySchema>;
 const UserQuery = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-    const form = useForm<userQueryData>({
+  const router = useRouter();
+
+  const form = useForm<userQueryData>({
     resolver: zodResolver(userQuerySchema),
     defaultValues: { message: "" },
   });
 
   const onSubmit = async (values: userQueryData) => {
     if (isLoading) return;
+    
     setIsLoading(true);
 
     console.log("Submitted:", values.message);
 
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // 1) LLM → Extract destination, dates, style, etc.
+    const userQuery = await extractTripDetailsWithLLM(values.message);
+    console.log("userQuery: ", userQuery);
+    
+
+    if (userQuery.error) {
+      console.error("Error extracting trip details:", userQuery.error);
+      setIsLoading(false);
+      return;
+    }
+
+    // 2) Weather + coordinates in one API call
+    let lat = userQuery.lat;
+    let lon = userQuery.lon;
+
+    if (!lat || !lon) {
+      // Fallback: use OpenWeather Geocoding API
+      const geoRes = await fetch(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(userQuery.destination)}&limit=1&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_KEY}`
+      );
+      const geoData = await geoRes.json();
+      if (geoData?.[0]) {
+        lat = geoData[0].lat;
+        lon = geoData[0].lon;
+      }
+    }
+
+    // Current + 7-day forecast (recommended)
+    const weatherData = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_KEY}&units=metric`
+    ).then(r => {
+      if (!r.ok) throw new Error("Weather fetch failed");
+      return r.json();
+    });
+
+    console.log("weatherData: ", weatherData);
+
+    // 3) LLM → Generate full final itinerary
+    const finalItinerary = await generateFullItineraryWithLLM({
+      userQuery,
+      weatherData,
+    });
+
+    console.log("finalItinerary: ", finalItinerary);
+    
+
+    // router.push(`/itinerary?data=${encodeURIComponent(JSON.stringify(finalItinerary))}`);
+
 
     form.reset();
     setIsLoading(false);
