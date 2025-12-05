@@ -17,7 +17,11 @@ const userQuerySchema = z.object({
 
 type userQueryData = z.infer<typeof userQuerySchema>;
 
-const UserQuery = () => {
+interface UserQueryProps {
+  onItineraryGenerated?: (itinerary: any) => void;
+}
+
+const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -82,6 +86,10 @@ const UserQuery = () => {
 
     console.log("finalItinerary: ", finalItinerary);
     
+    // Send finalItinerary to parent component
+    if (onItineraryGenerated) {
+      onItineraryGenerated(finalItinerary);
+    }
 
     // router.push(`/itinerary?data=${encodeURIComponent(JSON.stringify(finalItinerary))}`);
 
