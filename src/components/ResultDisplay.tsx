@@ -1,10 +1,92 @@
+import Date from "@/lib/Date"
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
+import ItineraryCard from "./ItineraryCard"
+import { object } from "zod"
 
 
 
 const ResultDisplay = ({ data }: {data: any}) => {
+    // console.log("data in ResultDisplay: ", data);
+ 
   return (
-    <div>
-        {JSON.stringify(data, null, 2)}
+    <div className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
+        {/* header */}
+        <div className="flex justify-between items-center my-4 px-4">
+            <div className="flex flex-col">
+                <h1 className="text-3xl font-bold">{data.destination} — {data.trip_length}-days Trip</h1>
+                <p className="lead" id="dates"><Date dateString={data.itinerary[0].date} /> — <Date dateString={data.itinerary[data.itinerary.length - 1].date} /> </p>
+            </div>
+            <div className="flex gap-4 items-center">
+                <div> <Input placeholder="Search itinerary, places or restaurants..." /> </div>
+                <div><Button variant={"default"} >Download JSON</Button></div>
+            </div>
+        </div>
+
+        {/* main two col  */}
+        <div className="grid grid-cols-3 gap-4 mx-2">
+            {/* left col */}
+            <div className="col-span-2 shadow-md p-4 rounded-lg">
+                
+                <h1 className="text-3xl font-semibold">Overview</h1>
+                <p>{data.overview_weather_summary}</p>
+                
+                {/* days & location */}
+                <div className="flex gap-4 pt-4">
+                    <div className="bg-gray-100 rounded-full py-2 px-4">{data.trip_length} days</div>
+                    <div className="bg-gray-100 rounded-full py-2 px-4">Lat {data.location.lat}, Lon {data.location.lon}</div>
+                </div>
+
+                {
+                    <div className="overflow-y-auto max-h-96">
+                        {data.itinerary.map((i:any) => (
+                            <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
+                        ))}
+                    </div>
+                }
+            </div>
+
+            {/* right col */}
+            <div className="shadow-md p-4 rounded-lg bg-gray-50 ">
+
+                {/* recommended attractions */}
+                <div className="text-2xl mb-4">Recommended — Attractions</div>
+                <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
+                    {
+                        data.recommended_attractions.map((ra: any) => (
+                            <div key={ra.name} className="text-sm flex flex-col gap-2 mb-4">
+                                <h1 className="font-bold">{ra.name}</h1>
+                                <p>{ra.why}</p>
+                                <p> <span className="font-semibold">Price:</span> {ra.approx_price}</p>
+                            </div> 
+                        ))
+                    }
+
+                </div>
+
+                {/* Hotels by budget */}
+                <div className="text-2xl mb-4">Hotels by budget</div>
+                <div className="flex flex-col gap-2">
+                    {
+                        Object.entries(data.recommended_hotels).map(([category, hotel]: [string, any]) => (
+                            <div key={category} className="text-sm flex flex-col mb-2">
+                                <div className="flex justify-between font-bold ">
+                                    <h1 className="capitalize">{category}</h1>
+                                    <p> ${hotel.price} per night</p>
+                                </div>
+                                <p>{hotel.name}</p>
+                            </div>
+                        ))
+                    }
+
+                </div>
+                
+
+
+                
+            </div>
+        </div>
+
     </div>
   )
 }
