@@ -38,7 +38,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 </div>
 
                 {
-                    <div className="overflow-y-auto max-h-96">
+                    <div className="overflow-y-auto max-h-96 text-sm">
                         {data.itinerary.map((i:any) => (
                             <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
                         ))}
