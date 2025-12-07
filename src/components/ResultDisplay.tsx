@@ -13,6 +13,20 @@ const ResultDisplay = ({ data }: {data: any}) => {
     // console.log("data in ResultDisplay: ", data);
     const [searchQuery, setSearchQuery] = useState("")
 
+    // Download JSON handler
+    const handleDownloadJSON = () => {
+        const jsonData = JSON.stringify(data, null, 2)
+        const blob = new Blob([jsonData], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = `itinerary-${data.destination}-${data.trip_length}days.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+    }
+
     // Filter itinerary based on search query
     const filteredItinerary = useMemo(() => {
         if (!searchQuery.trim()) return data.itinerary
@@ -86,7 +100,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                         className="w-64"
                     /> 
                 </div>
-                <div><Button variant={"default"} >Download JSON</Button></div>
+                <div><Button variant={"default"} onClick={handleDownloadJSON}>Download JSON</Button></div>
             </div>
         </div>
 
