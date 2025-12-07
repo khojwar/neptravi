@@ -85,6 +85,8 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     });
 
     console.log("finalItinerary: ", finalItinerary);
+
+    
     
     // Send finalItinerary to parent component
     if (onItineraryGenerated) {
@@ -108,9 +110,9 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
 
   return (
-    <div className="  w-full max-w-sm md:max-w-lg mt-4">
+    <div className="w-full max-w-sm md:max-w-lg mt-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} >
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="message"
@@ -129,9 +131,18 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
             )}
           />
         </form>
+
+        {/* 🚀 Loading Spinner */}
+        {isLoading && (
+          <div className="mt-4 flex items-center gap-2 text-blue-600">
+            <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+            <p className="text-sm md:text-base">Generating itinerary… please wait</p>
+          </div>
+        )}
       </Form>
     </div>
-  )
+  );
+
 }
 
 export default UserQuery
