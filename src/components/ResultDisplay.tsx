@@ -1,13 +1,73 @@
+"use client"
+
 import Date from "@/lib/Date"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import ItineraryCard from "./ItineraryCard"
 import { object } from "zod"
+import { useState, useMemo } from "react"
 
 
 
 const ResultDisplay = ({ data }: {data: any}) => {
     // console.log("data in ResultDisplay: ", data);
+    const [searchQuery, setSearchQuery] = useState("")
+
+    // Filter itinerary based on search query
+    const filteredItinerary = useMemo(() => {
+        if (!searchQuery.trim()) return data.itinerary
+
+        const query = searchQuery.toLowerCase()
+        return data.itinerary.filter((item: any) => {
+            const morning = item?.morning?.toLowerCase() || ""
+            const afternoon = item?.afternoon?.toLowerCase() || ""
+            const evening = item?.evening?.toLowerCase() || ""
+            const hotelName = item?.hotel_suggestion?.name?.toLowerCase() || ""
+            const hotelAddress = item?.hotel_suggestion?.address?.toLowerCase() || ""
+            const day = item?.day?.toString().toLowerCase() || ""
+            const date = item?.date?.toLowerCase() || ""
+
+            return (
+                morning.includes(query) ||
+                afternoon.includes(query) ||
+                evening.includes(query) ||
+                hotelName.includes(query) ||
+                hotelAddress.includes(query) ||
+                day.includes(query) ||
+                date.includes(query)
+            )
+        })
+    }, [searchQuery, data.itinerary])
+
+    // Filter attractions based on search query
+    const filteredAttractions = useMemo(() => {
+        if (!searchQuery.trim()) return data.recommended_attractions
+
+        const query = searchQuery.toLowerCase()
+        return data.recommended_attractions.filter((attraction: any) => {
+            const name = attraction.name?.toLowerCase() || ""
+            const why = attraction.why?.toLowerCase() || ""
+
+            return name.includes(query) || why.includes(query)
+        })
+    }, [searchQuery, data.recommended_attractions])
+
+    // Filter hotels based on search query
+    const filteredHotels = useMemo(() => {
+        if (!searchQuery.trim()) return data.recommended_hotels
+
+        const query = searchQuery.toLowerCase()
+        const filtered: any = {}
+
+        Object.entries(data.recommended_hotels).forEach(([category, hotel]: [string, any]) => {
+            const hotelName = hotel.name?.toLowerCase() || ""
+            if (hotelName.includes(query)) {
+                filtered[category] = hotel
+            }
+        })
+
+        return filtered
+    }, [searchQuery, data.recommended_hotels])
  
   return (
     <div id="ItinerarySection" className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
@@ -18,7 +78,14 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 <p className="lead" id="dates"><Date dateString={data.itinerary[0].date} /> — <Date dateString={data.itinerary[data.itinerary.length - 1].date} /> </p>
             </div>
             <div className="flex gap-4 items-center">
-                <div> <Input placeholder="Search itinerary, places or restaurants..." /> </div>
+                <div> 
+                    <Input 
+                        placeholder="Search itinerary, places or restaurants..." 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-64"
+                    /> 
+                </div>
                 <div><Button variant={"default"} >Download JSON</Button></div>
             </div>
         </div>
@@ -39,9 +106,13 @@ const ResultDisplay = ({ data }: {data: any}) => {
 
                 {
                     <div className="overflow-y-auto max-h-96 text-sm">
-                        {data.itinerary.map((i:any) => (
-                            <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
-                        ))}
+                        {filteredItinerary.length > 0 ? (
+                            filteredItinerary.map((i:any) => (
+                                <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
+                            ))
+                        ) : (
+                            <p className="text-center py-4 text-gray-500">No itineraries match your search</p>
+                        )}
                     </div>
                 }
             </div>
@@ -53,13 +124,17 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 <div className="text-2xl mb-4">Recommended — Attractions</div>
                 <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
                     {
-                        data.recommended_attractions.map((ra: any) => (
-                            <div key={ra.name} className="text-sm flex flex-col gap-2 mb-4">
-                                <h1 className="font-bold">{ra.name}</h1>
-                                <p>{ra.why}</p>
-                                <p> <span className="font-semibold">Price:</span> {ra.approx_price}</p>
-                            </div> 
-                        ))
+                        filteredAttractions.length > 0 ? (
+                            filteredAttractions.map((ra: any) => (
+                                <div key={ra.name} className="text-sm flex flex-col gap-2 mb-4">
+                                    <h1 className="font-bold">{ra.name}</h1>
+                                    <p>{ra.why}</p>
+                                    <p> <span className="font-semibold">Price:</span> {ra.approx_price}</p>
+                                </div> 
+                            ))
+                        ) : (
+                            <p className="text-gray-500">No attractions match your search</p>
+                        )
                     }
 
                 </div>
@@ -68,15 +143,19 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 <div className="text-2xl mb-4">Hotels by budget</div>
                 <div className="flex flex-col gap-2">
                     {
-                        Object.entries(data.recommended_hotels).map(([category, hotel]: [string, any]) => (
-                            <div key={category} className="text-sm flex flex-col mb-2">
-                                <div className="flex justify-between font-bold ">
-                                    <h1 className="capitalize">{category}</h1>
-                                    <p> ${hotel.price} per night</p>
+                        Object.entries(filteredHotels).length > 0 ? (
+                            Object.entries(filteredHotels).map(([category, hotel]: [string, any]) => (
+                                <div key={category} className="text-sm flex flex-col mb-2">
+                                    <div className="flex justify-between font-bold ">
+                                        <h1 className="capitalize">{category}</h1>
+                                        <p> ${hotel.price} per night</p>
+                                    </div>
+                                    <p>{hotel.name}</p>
                                 </div>
-                                <p>{hotel.name}</p>
-                            </div>
-                        ))
+                            ))
+                        ) : (
+                            <p className="text-gray-500">No hotels match your search</p>
+                        )
                     }
 
                 </div>
