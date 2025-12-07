@@ -10,7 +10,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
     // console.log("data in ResultDisplay: ", data);
  
   return (
-    <div className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
+    <div id="ItinerarySection" className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
         {/* header */}
         <div className="flex justify-between items-center my-4 px-4">
             <div className="flex flex-col">

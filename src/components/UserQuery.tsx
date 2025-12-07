@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { generateFullItineraryWithLLM } from "@/lib/generateFullItineraryWithLLM";
 import { extractTripDetailsWithLLM } from "@/lib/extractTripDetailsWithLLM";
+import Link from "next/link";
 
 
 const userQuerySchema = z.object({
@@ -23,6 +24,7 @@ interface UserQueryProps {
 
 const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [generatedData, setGeneratedData] = useState(null);
 
   const router = useRouter();
 
@@ -86,15 +88,14 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
     console.log("finalItinerary: ", finalItinerary);
 
-    
-    
-    // Send finalItinerary to parent component
+    // Send finalItinerary to parent component (if needed)
     if (onItineraryGenerated) {
       onItineraryGenerated(finalItinerary);
     }
 
-    // router.push(`/itinerary?data=${encodeURIComponent(JSON.stringify(finalItinerary))}`);
+    setGeneratedData(finalItinerary); 
 
+    // router.push(`/itinerary?data=${encodeURIComponent(JSON.stringify(finalItinerary))}`);
 
     form.reset();
     setIsLoading(false);
@@ -134,11 +135,21 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
         {/* 🚀 Loading Spinner */}
         {isLoading && (
-          <div className="mt-4 flex items-center gap-2 text-blue-600">
+          <div className="mt-4 flex flex-col items-center gap-2 text-blue-600">
             <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
             <p className="text-sm md:text-base">Generating itinerary… please wait</p>
           </div>
         )}
+
+        {generatedData && (
+          <Link href="#ItinerarySection"
+          className="mt-4 inline-block px-4 py-2 bg-gray-700/30 text-white rounded hover:bg-gray-600/30 transition"
+          >
+            View Generated Itinerary
+          </Link>
+        )}
+
+
       </Form>
     </div>
   );
