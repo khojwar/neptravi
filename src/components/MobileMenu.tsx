@@ -12,7 +12,7 @@ export function MobileMenu() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <button className="md:hidden p-2">
+        <button className="md:hidden ">
           <Menu className="h-6 w-6 cursor-pointer" />
         </button>
       </SheetTrigger>

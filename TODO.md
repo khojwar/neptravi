@@ -1,0 +1,2 @@
+- [x] Update src/lib/generateFullItineraryWithLLM.ts to use generateContent with responseMimeType for JSON
+- [x] Update src/lib/extractTripDetailsWithLLM.ts to use generateContent with responseMimeType for JSON
