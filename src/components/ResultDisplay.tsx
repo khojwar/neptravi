@@ -88,10 +88,10 @@ const ResultDisplay = ({ data }: {data: any}) => {
         {/* header */}
         <div className="flex flex-col lg:flex-row justify-between lg:items-center my-4 px-4">
             <div className="flex flex-col">
-                <h1 className="text-3xl font-bold">{data.destination} — {data.trip_length}-days Trip</h1>
+                <h1 className="text-xl md:text-3xl font-bold">{data.destination} — {data.trip_length}-days Trip</h1>
                 <p className="lead" id="dates"><Date dateString={data.itinerary[0].date} /> — <Date dateString={data.itinerary[data.itinerary.length - 1].date} /> </p>
             </div>
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 flex-col md:flex-row md:items-center md:justify-between mt-4 lg:mt-0">
                 <div> 
                     <Input 
                         placeholder="Search itinerary, places or restaurants..." 
@@ -105,11 +105,11 @@ const ResultDisplay = ({ data }: {data: any}) => {
         </div>
 
         {/* main two col  */}
-        <div className="grid grid-cols-3 gap-4 mx-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mx-2">
             {/* left col */}
-            <div className="col-span-2 shadow-md p-4 rounded-lg">
+            <div className="md:col-span-2 shadow-md p-4 rounded-lg">
                 
-                <h1 className="text-3xl font-semibold">Overview</h1>
+                <h1 className="text-xl md:text-3xl font-semibold">Overview</h1>
                 <p>{data.overview_weather_summary}</p>
                 
                 {/* days & location */}
@@ -119,7 +119,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 </div>
 
                 {
-                    <div className="overflow-y-auto max-h-96 text-sm">
+                    <div className="md:overflow-y-auto md:max-h-96 text-sm">
                         {filteredItinerary.length > 0 ? (
                             filteredItinerary.map((i:any) => (
                                 <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
@@ -136,7 +136,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
 
                 {/* recommended attractions */}
                 <div className="md:text-xl lg:text-2xl mb-4">Recommended — Attractions</div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-60 overflow-y-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:max-h-60 md:overflow-y-auto">
                     {
                         filteredAttractions.length > 0 ? (
                             filteredAttractions.map((ra: any) => (
