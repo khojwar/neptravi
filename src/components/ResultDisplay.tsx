@@ -86,7 +86,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
   return (
     <div id="ItinerarySection" className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
         {/* header */}
-        <div className="flex justify-between items-center my-4 px-4">
+        <div className="flex flex-col lg:flex-row justify-between lg:items-center my-4 px-4">
             <div className="flex flex-col">
                 <h1 className="text-3xl font-bold">{data.destination} — {data.trip_length}-days Trip</h1>
                 <p className="lead" id="dates"><Date dateString={data.itinerary[0].date} /> — <Date dateString={data.itinerary[data.itinerary.length - 1].date} /> </p>
@@ -135,8 +135,8 @@ const ResultDisplay = ({ data }: {data: any}) => {
             <div className="shadow-md p-4 rounded-lg bg-gray-50 ">
 
                 {/* recommended attractions */}
-                <div className="text-2xl mb-4">Recommended — Attractions</div>
-                <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
+                <div className="md:text-xl lg:text-2xl mb-4">Recommended — Attractions</div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-60 overflow-y-auto">
                     {
                         filteredAttractions.length > 0 ? (
                             filteredAttractions.map((ra: any) => (

@@ -19,7 +19,7 @@ const ItineraryCard = ({ days, date, temp, feels_like, description, morning, aft
         <div className="bg-white mt-4 grid grid-cols-6 gap-4 rounded-lg">
         {/* inner col 1st */}
         <div className="bg-gray-100 col-span-1 p-2 rounded-lg">
-            <h1 className="font-semibold text-2xl">Day {days}</h1>
+            <h1 className="font-semibold text-lg lg:text-2xl">Day {days}</h1>
             <p>{date}</p>
         </div>
 
