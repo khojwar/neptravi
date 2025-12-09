@@ -7,8 +7,11 @@ import * as z from "zod"
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-import { generateFullItineraryWithLLM } from "@/lib/generateFullItineraryWithLLM";
+
+// import { generateFullItineraryWithLLM } from "@/lib/generateFullItineraryWithLLM";
+import { streamFullItineraryWithLLM } from "@/lib/generateFullItineraryWithLLM";
 import { extractTripDetailsWithLLM } from "@/lib/extractTripDetailsWithLLM";
+
 import Link from "next/link";
 
 
@@ -26,6 +29,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedData, setGeneratedData] = useState(null);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState("");
 
   const router = useRouter();
 
@@ -39,6 +43,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     
     setIsLoading(true);
     setError(null);
+    setStatus("Understanding your destination…");
 
     console.log("Submitted:", values.message);
 
@@ -47,7 +52,6 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
       const userQuery = await extractTripDetailsWithLLM(values.message);
       console.log("userQuery: ", userQuery);
       
-
       if (userQuery.error) {
         console.error("Error extracting trip details:", userQuery.error);
         setError("Could not understand your destination. Please provide a valid location or city name.");
@@ -55,7 +59,9 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
         return;
       }
 
+
       // 2) Weather + coordinates in one API call
+      setStatus("Fetching real-time weather data…");
       let lat = userQuery.lat;
       let lon = userQuery.lon;
 
@@ -65,6 +71,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
           `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(userQuery.destination)}&limit=1&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_KEY}`
         );
         const geoData = await geoRes.json();
+
         if (geoData?.[0]) {
           lat = geoData[0].lat;
           lon = geoData[0].lon;
@@ -86,13 +93,65 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
       console.log("weatherData: ", weatherData);
 
+      
       // 3) LLM → Generate full final itinerary
-      const finalItinerary = await generateFullItineraryWithLLM({
+      setStatus("Generating itinerary…");
+      const stream = await streamFullItineraryWithLLM({
         userQuery,
         weatherData,
       });
 
+
+      let fullText = "";
+
+      for await (const chunk of stream.stream) {
+        const text = chunk.text();
+        fullText += text;
+
+        // Dynamic status updates
+        if (text.includes('"day": 1')) setStatus("Creating Day 1 itinerary…");
+        if (text.includes('"day": 2')) setStatus("Creating Day 2 itinerary…");
+        if (text.includes('"recommended_hotels"'))
+          setStatus("Finding best hotels…");
+        if (text.includes('"recommended_restaurants"'))
+          setStatus("Listing restaurants…");
+        if (text.includes('"recommended_attractions"'))
+          setStatus("Highlighting must-see attractions…");
+      }
+
+      // Remove markdown code blocks if present
+      let jsonText = fullText.trim();
+      if (jsonText.startsWith("```json")) {
+        jsonText = jsonText.replace(/^```json\n?/, "").replace(/\n?```$/, "");
+      } else if (jsonText.startsWith("```")) {
+        jsonText = jsonText.replace(/^```\n?/, "").replace(/\n?```$/, "");
+      }
+
+      // Validate and parse JSON with better error handling
+      let finalItinerary;
+      try {
+        finalItinerary = JSON.parse(jsonText);
+      } catch (parseErr) {
+        console.error("JSON Parse Error:", parseErr);
+        console.error("Invalid JSON text (first 500 chars):", jsonText.substring(0, 500));
+        
+        // Try to find and fix common issues
+        let cleanedText = jsonText
+          .replace(/\n/g, " ") // Replace newlines with spaces
+          .replace(/\t/g, " ") // Replace tabs with spaces
+          .replace(/\\([^"\\/bfnrtu])/g, "$1"); // Remove invalid escape sequences
+        
+        try {
+          finalItinerary = JSON.parse(cleanedText);
+        } catch (retryErr) {
+          setError("Failed to parse generated itinerary. The response may be incomplete. Please try again.");
+          setIsLoading(false);
+          return;
+        }
+      }
+      
       console.log("finalItinerary: ", finalItinerary);
+
 
       // Send finalItinerary to parent component (if needed)
       if (onItineraryGenerated) {
@@ -141,17 +200,14 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
           {/* 🚀 Loading Spinner */}
           {isLoading && (
-            <div className="mt-4 flex flex-col items-center gap-2 text-blue-600">
-              <div className="animate-spin h-5 w-5 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-              <p className="text-sm md:text-base">Generating itinerary… please wait</p>
+            <div className="mt-3 text-blue-600 animate-pulse text-sm">
+              {status}
             </div>
           )}
 
           {/* ⚠️ Error Message */}
           {error && (
-            <div className="mt-4 p-4">
-              <p className="text-red-700 text-sm md:text-base">{error}</p>
-            </div>
+            <p className="mt-3 text-red-600 text-sm">{error}</p>
           )}
 
           {/* ✅ Success Link */}
