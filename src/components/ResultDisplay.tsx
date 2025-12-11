@@ -7,8 +7,6 @@ import ItineraryCard from "./ItineraryCard"
 import { object } from "zod"
 import { useState, useMemo, useEffect } from "react"
 import CurrencyToggle from "./CurrencyToggle"
-import { log } from "console"
-
 
 
 const ResultDisplay = ({ data }: {data: any}) => {
@@ -163,7 +161,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                     <div className="md:overflow-y-auto md:max-h-96 text-sm">
                         {filteredItinerary.length > 0 ? (
                             filteredItinerary.map((i:any) => (
-                                <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} />
+                                <ItineraryCard key={i.day} days={i?.day} date={i?.date} temp={i?.weather?.temp} feels_like = {i?.weather?.feels_like} description= {i?.weather?.description}  morning = {i?.morning} afternoon={i?.afternoon} evening={i?.evening} name={i?.hotel_suggestion?.name} address={i?.hotel_suggestion?.address} price_per_night_usd={i?.hotel_suggestion?.price_per_night_usd} contact={i?.hotel_suggestion?.contact} rate={rate} currency={currency} />
                             ))
                         ) : (
                             <p className="text-center py-4 text-gray-500">No itineraries match your search</p>

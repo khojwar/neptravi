@@ -12,9 +12,11 @@ interface iteneraryProps {
     address?: String 
     price_per_night_usd?: number 
     contact?: String
+    rate: number,
+    currency?: string
 }
 
-const ItineraryCard = ({ days, date, temp, feels_like, description, morning, afternoon, evening, name, address, price_per_night_usd, contact}: iteneraryProps) => {
+const ItineraryCard = ({ days, date, temp, feels_like, description, morning, afternoon, evening, name, address, price_per_night_usd, contact, rate, currency}: iteneraryProps) => {
   return (
         <div className="bg-white mt-4 grid grid-cols-1 md:grid-cols-6 md:gap-4 rounded-lg">
         {/* inner col 1st */}
@@ -30,7 +32,7 @@ const ItineraryCard = ({ days, date, temp, feels_like, description, morning, aft
                 <p> <span className="font-bold">Morning:</span> {morning}</p>
                 <p> <span className="font-bold">Afternoon:</span> {afternoon}</p>
                 <p> <span className="font-bold">Evening:</span> {evening}</p>
-                {name && <p> <span className="font-bold">Hotel:</span> {name} ({address}) - ${price_per_night_usd}/night - {contact}</p>}
+                {name && price_per_night_usd && <p> <span className="font-bold">Hotel:</span> {name} ({address}) - {currency === "USD" ? `$${price_per_night_usd}` : `रू ${(price_per_night_usd * rate).toFixed(2)}`}/night - {contact}</p>}
             </div>
         </div>
     </div>
