@@ -92,7 +92,7 @@ Return ONLY valid JSON in this EXACT structure (no markdown, no extra text):
     // ... more days
   ],
   "recommended_attractions": [
-    { "name": "Phewa Lake", "why": "Stunning views and boating", "approx_price": "Free - $15" }
+    { "name": "Phewa Lake", "why": "Stunning views and boating", "approx_price": "Free - $ 15" }
   ],
   "recommended_restaurants": [
     { "name": "Moondance Restaurant", "cuisine": "Nepali/International", "approx_cost_usd": 12 }

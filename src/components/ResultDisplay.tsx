@@ -5,13 +5,22 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import ItineraryCard from "./ItineraryCard"
 import { object } from "zod"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
+import CurrencyToggle from "./CurrencyToggle"
+import { log } from "console"
 
 
 
 const ResultDisplay = ({ data }: {data: any}) => {
     // console.log("data in ResultDisplay: ", data);
     const [searchQuery, setSearchQuery] = useState("")
+    const [currency, setCurrency] = useState("USD")
+    const [rate, setRate] = useState(1);
+
+    // Currency toggle handler
+    const toggleCurrency = () => {
+        setCurrency((prevCurrency) => (prevCurrency === "USD" ? "NPR" : "USD"))
+    }
 
     // Download JSON handler
     const handleDownloadJSON = () => {
@@ -82,6 +91,35 @@ const ResultDisplay = ({ data }: {data: any}) => {
 
         return filtered
     }, [searchQuery, data.recommended_hotels])
+
+    useEffect(() => {
+      async function loadRate() {
+        if (currency === "USD") {
+          setRate(1);
+          return;
+        }
+
+        try {
+          const res = await fetch("https://open.er-api.com/v6/latest/USD");
+          const data = await res.json();
+          setRate(data.rates.NPR);
+
+        } catch (err) {
+          console.error("Failed to fetch conversion rate:", err);
+          setRate(1); // fallback
+        }
+      }
+
+      loadRate();
+    }, [currency]);
+
+    console.log("Current rate: ", rate);
+
+    const displayPrice = (usdPrice: number) => {
+        if (currency === "USD") return `$${usdPrice}`;
+            return `रू ${(usdPrice * rate).toFixed(2)}`;
+        };
+
  
   return (
     <div id="ItinerarySection" className="md:max-w-3xl lg:max-w-7xl mx-auto mt-32">
@@ -92,6 +130,9 @@ const ResultDisplay = ({ data }: {data: any}) => {
                 <p className="lead" id="dates"><Date dateString={data.itinerary[0].date} /> — <Date dateString={data.itinerary[data.itinerary.length - 1].date} /> </p>
             </div>
             <div className="flex gap-4 flex-col md:flex-row md:items-center md:justify-between mt-4 lg:mt-0">
+                <Button onClick={toggleCurrency}>
+                {currency === "NPR" ? "Switch to USD" : "Switch to NPR"}
+                </Button>
                 <div> 
                     <Input 
                         placeholder="Search itinerary, places or restaurants..." 
@@ -143,7 +184,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                                 <div key={ra.name} className="text-sm flex flex-col gap-2 mb-4">
                                     <h1 className="font-bold">{ra.name}</h1>
                                     <p>{ra.why}</p>
-                                    <p> <span className="font-semibold">Price:</span> {ra.approx_price}</p>
+                                    <p>{ra.approx_price}</p>
                                 </div> 
                             ))
                         ) : (
@@ -162,7 +203,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                                 <div key={category} className="text-sm flex flex-col mb-2">
                                     <div className="flex justify-between font-bold ">
                                         <h1 className="capitalize">{category}</h1>
-                                        <p> ${hotel.price} per night</p>
+                                        <p>{displayPrice(hotel.price)} per night</p>
                                     </div>
                                     <p>{hotel.name}</p>
                                 </div>
@@ -172,11 +213,7 @@ const ResultDisplay = ({ data }: {data: any}) => {
                         )
                     }
 
-                </div>
-                
-
-
-                
+                </div>  
             </div>
         </div>
 
