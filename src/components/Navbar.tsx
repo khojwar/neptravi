@@ -30,7 +30,9 @@ return (
 
       <div className='flex items-center gap-2'>
         <LanguageToggle />
-        <Button variant='custom' className='hidden md:block'>Login</Button>
+        <Link href='/signin'>
+          <Button variant='custom' className='hidden md:block'>Login</Button>
+        </Link>
       </div>
     </div>
   );
