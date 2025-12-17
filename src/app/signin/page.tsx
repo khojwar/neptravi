@@ -27,6 +27,7 @@ const SignIn = () => {
                 const data = await res.json();
                 console.log("data", data);
                 
+                
                 // Store tokens manually
                 localStorage.setItem('accessToken', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
