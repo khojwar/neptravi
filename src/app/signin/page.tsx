@@ -1,47 +1,68 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/providers/authProvider';
 
 const SignIn = () => {
     const [username, setUsername] = useState('emilys'); // Test user from DummyJSON
     const [password, setPassword] = useState('emilyspass');
     const [error, setError] = useState('');
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const { login, isAuthenticated } = useAuth();
+
+    console.log("login", login);
+    console.log("isAuthenticated", isAuthenticated);
+    
+
+    // Watch for authentication change and redirect
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/profile');
+        }
+    }, [isAuthenticated, router]);
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         setError('');
+        setLoading(true);
 
         try {
             const res = await fetch('https://dummyjson.com/auth/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer dummy', // your working fix
+                },
+                body: JSON.stringify({ username, password, expiresInMins: 30 }),
+                credentials: 'omit',
             });
     
     
             if (res.ok) {
                 const data = await res.json();
-                console.log("data", data);
+                console.log("Login success:", data);
+
+                login(data.accessToken); 
                 
-                
-                // Store tokens manually
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('user', JSON.stringify(data));    
-    
                 // Redirect to profile or dashboard
-                router.push('/profile');
+                // router.push('/profile');
     
             } else {
-                setError('Invalid credentials');
-            }
+                const errorData = await res.json().catch(() => ({}));
+                console.error("Login failed:", errorData);
+                setError(errorData.message || 'Invalid credentials');
+            } 
     
         } catch (err) {
+            console.error(err);
             setError('Something went wrong');
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -68,8 +89,12 @@ const SignIn = () => {
                 required
                 />
 
-                <button type="submit" className="w-full bg-blue-500 text-white p-2">
-                    Login
+                <button 
+                    type="submit" 
+                    className="w-full bg-blue-500 text-white p-2 disabled:bg-blue-300"
+                    disabled={loading}
+                >
+                    {loading ? 'Logging in...' : 'Login'}
                 </button>
 
                 {error && <p className="text-red-500">{error}</p>}

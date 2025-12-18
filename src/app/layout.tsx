@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-// import { geistSans, geistMono, poppins } from "./fonts";
 import {Poppins } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { AuthProvider } from "@/providers/authProvider";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -48,8 +48,10 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased font-sans` }
       >
-        <Navbar />
-        {children}
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

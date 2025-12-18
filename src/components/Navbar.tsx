@@ -6,33 +6,12 @@ import LanguageToggle from './LanguageToggle';
 import Link from 'next/link';
 import { MobileMenu } from './MobileMenu';
 import { NavigationLinks } from './NavigationLinks';
-import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '@/providers/authProvider';
 
 
 const Navbar = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setIsAuthenticated(!!token);
-  }, []);
-
-  // Re-check auth state whenever the route changes so Navbar updates immediately after login/logout
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setIsAuthenticated(!!token);
-  }, [pathname]);
-
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    router.push('/signin');
-  }
+  const { isAuthenticated, logout } = useAuth();
 
 
 return (
