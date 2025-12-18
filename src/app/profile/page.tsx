@@ -36,9 +36,7 @@ const ProfilePage = () => {
                     setUser(data);
                 }
             });
-
-
-    }, []);
+    }, [router]);
 
     if (!user) return <p className='flex justify-center items-center min-h-screen w-auto'>Loading...</p>;
     

@@ -31,6 +31,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     localStorage.removeItem('accessToken');
     setToken(null);
+
+    // redirect to home or login page
+    window.location.href = '/signin';
   };
 
   return (
