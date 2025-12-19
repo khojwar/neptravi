@@ -1,3 +1,4 @@
+import ReduxProvider from '@/store/ReduxProvider'
 import type { Metadata } from "next";
 import "./globals.css";
 import {Poppins } from "next/font/google";
@@ -48,10 +49,12 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased font-sans` }
       >
-        <AuthProvider>
-          <Navbar />
-          {children}
-        </AuthProvider>
+        <ReduxProvider>
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

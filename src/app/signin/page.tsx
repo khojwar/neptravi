@@ -2,28 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/providers/authProvider';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '@/store/slices/authSlice';
 
 const SignIn = () => {
     const [username, setUsername] = useState('emilys'); // Test user from DummyJSON
     const [password, setPassword] = useState('emilyspass');
     const [error, setError] = useState('');
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
 
-    const { login, isAuthenticated } = useAuth();
-
-    console.log("login", login);
-    console.log("isAuthenticated", isAuthenticated);
-    
-
-    // Watch for authentication change and redirect
-    useEffect(() => {
-        if (isAuthenticated) {
-            router.push('/profile');
-        }
-    }, [isAuthenticated, router]);
-
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,23 +30,22 @@ const SignIn = () => {
                 body: JSON.stringify({ username, password, expiresInMins: 30 }),
                 credentials: 'omit',
             });
-    
-    
-            if (res.ok) {
-                const data = await res.json();
-                console.log("Login success:", data);
 
-                login(data.accessToken); 
-                
-                // Redirect to profile or dashboard
-                // router.push('/profile');
+            if (!res.ok) throw new Error('Invalid credentials')
     
-            } else {
-                const errorData = await res.json().catch(() => ({}));
-                console.error("Login failed:", errorData);
-                setError(errorData.message || 'Invalid credentials');
-            } 
-    
+            const data = await res.json();
+
+            // save in redux
+            dispatch(loginSuccess({
+                user: data,
+                token: data.accessToken,
+            }));
+
+            // save in localStorage (optional)
+            localStorage.setItem('accessToken', data.accessToken);
+            
+            router.push('/profile')
+
         } catch (err) {
             console.error(err);
             setError('Something went wrong');
