@@ -4,13 +4,14 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
+import Image from "next/image"
 
 const ProductCard = (post: any) => {
   return (
     <div>
         <Card>
             <CardContent className="flex flex-col gap-2">
-                <img src={post.thumbnail} alt={post.title} loading="lazy" className="w-full h-32 object-cover mb-2" />
+                <Image src={post.thumbnail} alt={post.title} width={400} height={300} className="w-full h-32 object-cover mb-2" />
                 <CardTitle>{post.title}</CardTitle>
                 <CardDescription>{post.description}</CardDescription>
 
