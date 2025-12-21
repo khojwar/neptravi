@@ -23,7 +23,9 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout())
-    localStorage.removeItem('accessToken')
+    localStorage.removeItem('auth')
+
+    document.cookie = 'token=; path=/; max-age=0'
     router.push('/signin')
   }
 

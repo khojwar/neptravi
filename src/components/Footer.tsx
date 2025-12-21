@@ -1,6 +1,8 @@
 import { Facebook, Instagram, Mail, Youtube } from 'lucide-react'
 import Link from 'next/link';
-import EmailSubscribe from './EmailSubscribe';
+import dynamic from 'next/dynamic';
+
+const EmailSubscribe = dynamic(() => import('./EmailSubscribe'), { ssr: false });
 
 const Footer = () => {
 

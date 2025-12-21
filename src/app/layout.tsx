@@ -4,6 +4,7 @@ import "./globals.css";
 import {Poppins } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/providers/authProvider";
+import AuthHydrator from '@/providers/AuthHydrator';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -47,10 +48,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.className} antialiased font-sans` }
+        className={`${poppins.className} antialiased font-sans`}
+        suppressHydrationWarning={true}
       >
         <ReduxProvider>
           <AuthProvider>
+            <AuthHydrator />
             <Navbar />
             {children}
           </AuthProvider>

@@ -41,9 +41,15 @@ const SignIn = () => {
                 token: data.accessToken,
             }));
 
-            // save in localStorage (optional)
-            localStorage.setItem('accessToken', data.accessToken);
-            
+            // save to localStorage for hydration
+            localStorage.setItem('auth', JSON.stringify({
+                user: data,
+                token: data.accessToken,
+            }));
+
+            // save token in cookie (middleware-readable)
+            document.cookie = `token=${data.accessToken}; path=/; max-age=${30 * 60}`;
+
             router.push('/profile')
 
         } catch (err) {

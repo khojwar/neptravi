@@ -17,8 +17,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('accessToken');
-    if (savedToken) setToken(savedToken);
+    const auth = localStorage.getItem('auth');
+    if (auth) {
+      const { token } = JSON.parse(auth);
+      setToken(token);
+    }
 
     setIsLoading(false);
   }, []);
@@ -29,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };    
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('auth');
     setToken(null);
 
     // redirect to home or login page

@@ -21,9 +21,13 @@ const authSlice = createSlice({
         logout(state) {
             state.user = null;
             state.token = null;
+        },
+        rehydrateAuth(state, action: PayloadAction<{ user: any; token: string }>) {
+            state.user = action.payload.user
+            state.token = action.payload.token
         }
     }
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
+export const { loginSuccess, logout, rehydrateAuth } = authSlice.actions;
 export default authSlice.reducer;
