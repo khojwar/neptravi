@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@/store/slices/authSlice';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
     const [username, setUsername] = useState('emilys'); // Test user from DummyJSON
@@ -49,6 +50,8 @@ const SignIn = () => {
 
             // save token in cookie (middleware-readable)
             document.cookie = `token=${data.accessToken}; path=/; max-age=${30 * 60}`;
+
+            toast.success('Successfully created!');
 
             router.push('/profile')
 

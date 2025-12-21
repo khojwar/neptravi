@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
 import { logout } from '@/store/slices/authSlice'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
   const [activeSection, setActiveSection] = useState('about')
@@ -26,6 +27,7 @@ const Navbar = () => {
     localStorage.removeItem('auth')
 
     document.cookie = 'token=; path=/; max-age=0'
+    toast.success('Logged out successfully')
     router.push('/signin')
   }
 

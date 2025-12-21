@@ -5,6 +5,7 @@ import {Poppins } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/providers/authProvider";
 import AuthHydrator from '@/providers/AuthHydrator';
+import { Toaster } from 'react-hot-toast';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -55,6 +56,7 @@ export default function RootLayout({
           <AuthProvider>
             <AuthHydrator />
             <Navbar />
+            <Toaster position='bottom-right' />
             {children}
           </AuthProvider>
         </ReduxProvider>
