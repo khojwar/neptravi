@@ -4,8 +4,14 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/store/slices/authSlice";
 import toast from "react-hot-toast";
+
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
@@ -78,77 +84,92 @@ const SignIn = () => {
     }
   };
 
-return (
-    <div className="flex justify-center items-center min-h-screen mx-auto">
-      <div className="max-w-md w-full p-6 border rounded">
-        <h1 className="text-2xl mb-4">Login using DummyJSON</h1>
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Login</CardTitle>
+        </CardHeader>
 
-        <Formik
-          initialValues={{
-            username: 'emilys',
-            password: 'emilyspass',
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ isSubmitting, status }) => (
-            <Form className="space-y-4">
-              {/* Username */}
-              <div>
-                <Field
-                  name="username"
-                  type="text"
-                  placeholder="Username"
-                  className="w-full p-2 border"
-                />
-                <ErrorMessage
-                  name="username"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-
-              {/* Password */}
-              <div>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className="w-full p-2 border"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="p"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-500 text-white p-2 disabled:bg-blue-300"
-              >
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </button>
-
-              {/* API Error */}
-              {status && <p className="text-red-500">{status}</p>}
-            </Form>
-          )}
-        </Formik>
-
-        <p className="mt-4 text-sm">
-          Test users:{' '}
-          <a
-            href="https://dummyjson.com/users"
-            target="_blank"
-            className="text-blue-500"
+        <CardContent>
+          <Formik
+            initialValues={{
+              username: "emilys",
+              password: "emilyspass",
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
           >
-            https://dummyjson.com/users
-          </a>
-        </p>
-      </div>
+            {({ isSubmitting, status }) => (
+              <Form className="space-y-4">
+                {/* Username */}
+                <div className="space-y-1">
+                  <Label htmlFor="username">Username</Label>
+                  <Field name="username">
+                    {({ field }: any) => (
+                      <Input
+                        {...field}
+                        id="username"
+                        placeholder="Enter username"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="username"
+                    component="p"
+                    className="text-sm text-red-500"
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="space-y-1">
+                  <Label htmlFor="password">Password</Label>
+                  <Field name="password">
+                    {({ field }: any) => (
+                      <Input
+                        {...field}
+                        id="password"
+                        type="password"
+                        placeholder="Enter password"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="password"
+                    component="p"
+                    className="text-sm text-red-500"
+                  />
+                  </div>
+
+                {/* API Error */}
+                {status && (
+                  <p className="text-sm text-red-500">{status}</p>
+                )}
+
+                {/* Submit */}
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Logging in...' : 'Login'}
+                </Button>
+              </Form>
+            )}
+          </Formik>
+
+          <p className="mt-4 text-sm">
+            Test users:{" "}
+            <a
+              href="https://dummyjson.com/users"
+              target="_blank"
+              className="text-blue-500"
+            >
+              https://dummyjson.com/users
+            </a>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 };
