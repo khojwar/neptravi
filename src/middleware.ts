@@ -1,8 +1,12 @@
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export function middleware(request: NextRequest) {
-    const token = request.cookies.get('token')?.value;
+export async function middleware(request: NextRequest) {
+    const token = request.cookies.get('token')?.value || await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET,
+    })
     const { pathname } = request.nextUrl;
 
     // protect profile route

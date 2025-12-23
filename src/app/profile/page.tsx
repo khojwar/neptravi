@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store/store'
+import { useSession } from 'next-auth/react'
+
 
 // 👇 Skeleton grid component
 const ProductSkeletonGrid = () => (
@@ -36,6 +38,8 @@ async function getProducts() {
 }
 
 const ProfilePage = () => {
+  const { data: session, status } = useSession();
+  
   const router = useRouter()
 
   // ✅ Redux state
@@ -47,10 +51,14 @@ const ProfilePage = () => {
 
   // 🔐 Auth guard
   useEffect(() => {
-    if (!token) {
+    // wait for NextAuth to finish loading session
+    if (status === 'loading') return;
+
+    // allow access if we have either a Redux token (app auth) OR a NextAuth session
+    if (!token && !session) {
       router.push('/signin')
     }
-  }, [token, router])
+  }, [token, session, status, router])
 
   // 📦 Fetch products
   useEffect(() => {
@@ -60,18 +68,25 @@ const ProfilePage = () => {
     })
   }, [])
 
-  // 🧱 Prevent crash during redirect
-  if (!user) {
+  // 🧱 Prevent crash during redirect (allow NextAuth session to render)
+  if (!user && !session) {
     return <Skeleton className="h-8 w-64 m-6" />
   }
 
+
+
+  
+
   return (
-    <div className="max-w-full mx-auto mt-10 px-4">
-      <h1 className="text-2xl mb-4">
-        Welcome, {user.firstName} {user.lastName}!
+    <div className="max-w-full mx-auto mt-20 px-4">
+      <h1 className="text-2xl mb-4 font-semibold">
+        {
+          session ? `Welcome, ${session.user?.name}!` : `Welcome, ${user.firstName} ${user.lastName}!`
+        }
+        
       </h1>
 
-      <h2 className="text-xl mb-4">Products:</h2>
+      <h2 className="text-xl mb-4 font-semibold">Products:</h2>
 
       {loadingProducts ? (
         <ProductSkeletonGrid />

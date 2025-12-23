@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   password: Yup.string()
@@ -158,7 +160,7 @@ const SignIn = () => {
             )}
           </Formik>
 
-          <p className="mt-4 text-sm">
+          {/* <p className="mt-4 text-sm">
             Test users:{" "}
             <a
               href="https://dummyjson.com/users"
@@ -167,7 +169,11 @@ const SignIn = () => {
             >
               https://dummyjson.com/users
             </a>
-          </p>
+          </p> */}
+
+          {/* login with google: */}
+            <GoogleLoginButton />
+
         </CardContent>
       </Card>
     </div>

@@ -11,6 +11,7 @@ import { RootState } from '@/store/store'
 import { logout } from '@/store/slices/authSlice'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { signOut, useSession } from 'next-auth/react'
 
 const Navbar = () => {
   const [activeSection, setActiveSection] = useState('about')
@@ -18,17 +19,20 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  // ✅ Redux auth state
+  // ✅ Auth state (Redux or next-auth)
+  const { data: session, status } = useSession()
   const { token } = useSelector((state: RootState) => state.auth)
-  const isAuthenticated = Boolean(token)
+  const isAuthenticated = Boolean(token) || status === 'authenticated'
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(logout())
     localStorage.removeItem('auth')
 
     document.cookie = 'token=; path=/; max-age=0'
     toast.success('Logged out successfully')
-    router.push('/signin')
+    
+    await signOut({ callbackUrl: '/signin' });
+    // router.push('/signin')
   }
 
   return (
@@ -37,7 +41,7 @@ const Navbar = () => {
         <span className="md:hidden">
           <MobileMenu />
         </span>
-        NEPTRAVI
+        <Link href="/" className='text-gray-300'>NEPTRAVI</Link>
       </h1>
 
       {/* Desktop Navigation */}

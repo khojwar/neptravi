@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/providers/authProvider";
 import AuthHydrator from '@/providers/AuthHydrator';
 import { Toaster } from 'react-hot-toast';
+import NextAuthProvider from '@/providers/nextauthProvider';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -52,14 +53,16 @@ export default function RootLayout({
         className={`${poppins.className} antialiased font-sans`}
         suppressHydrationWarning={true}
       >
-        <ReduxProvider>
-          <AuthProvider>
-            <AuthHydrator />
-            <Navbar />
-            <Toaster position='bottom-right' />
-            {children}
-          </AuthProvider>
-        </ReduxProvider>
+        <NextAuthProvider>
+          <ReduxProvider>
+            <AuthProvider>
+                  <AuthHydrator />
+                  <Navbar />
+                  <Toaster position='bottom-right' />
+                  {children}
+            </AuthProvider>
+          </ReduxProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
