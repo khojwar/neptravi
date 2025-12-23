@@ -69,7 +69,11 @@ const ProfilePage = () => {
   }, [])
 
   // 🧱 Prevent crash during redirect (allow NextAuth session to render)
-  if (!user && !session) {
+  // if (!user && !session) {
+  //   return <Skeleton className="h-8 w-64 m-6" />
+  // }
+
+  if (status === 'loading') {
     return <Skeleton className="h-8 w-64 m-6" />
   }
 
@@ -81,7 +85,7 @@ const ProfilePage = () => {
     <div className="max-w-full mx-auto mt-20 px-4">
       <h1 className="text-2xl mb-4 font-semibold">
         {
-          session ? `Welcome, ${session.user?.name}!` : `Welcome, ${user.firstName} ${user.lastName}!`
+          session ? `Welcome, ${session.user?.name}!` : `Welcome, ${user?.firstName} ${user?.lastName}!`
         }
         
       </h1>

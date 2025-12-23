@@ -28,6 +28,7 @@ const handler = NextAuth({
     events: {
         async signOut(message) {
             // Clear any additional session data if needed
+            
         }
     }
 
