@@ -21,18 +21,28 @@ const Navbar = () => {
 
   // ✅ Auth state (Redux or next-auth)
   const { data: session, status } = useSession()
-  const { token } = useSelector((state: RootState) => state.auth)
-  const isAuthenticated = Boolean(token) || status === 'authenticated'
+  const { token, hydrated } = useSelector((state: RootState) => state.auth)
+
+  if (!hydrated) return null // wait for redux hydration
+  
+  const isAuthenticated = status === 'authenticated' || Boolean(token)
+
+  if (status === 'loading') {
+    return null
+  }
 
   const handleLogout = async () => {
     dispatch(logout())
     localStorage.removeItem('auth')
-
     document.cookie = 'token=; path=/; max-age=0'
+    
     toast.success('Logged out successfully')
     
-    await signOut({ callbackUrl: '/signin' });
-    // router.push('/signin')
+    if (status === 'authenticated') {
+      await signOut({ callbackUrl: '/signin' })
+    } else {
+      router.push('/signin')
+    }
   }
 
   return (
