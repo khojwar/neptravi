@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"
 import { useForm } from "react-hook-form";
@@ -14,8 +14,10 @@ import { extractTripDetailsWithLLM } from "@/lib/extractTripDetailsWithLLM";
 
 import Link from "next/link";
 import { useRef } from "react";
-import { Plus } from "lucide-react";
+import { Plus, UploadCloud, X } from "lucide-react";
 
+// Import Dropzone
+import { useDropzone } from "react-dropzone";
 
 const userQuerySchema = z.object({
   message: z.string().min(1, "Message cannot be empty").max(4000),
@@ -43,6 +45,30 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     defaultValues: { message: "" },
   });
 
+
+  // Dropzone callback
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      setSelectedFile(acceptedFiles[0]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+      "application/pdf": [".pdf"],
+      "text/*": [".txt"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+        ".docx",
+      ],
+    },
+    maxFiles: 1,
+    multiple: false,
+    disabled: isLoading,
+  });
+
   const onSubmit = async (values: userQueryData) => {
     if (isLoading) return;
     
@@ -50,9 +76,8 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     setError(null);
     setStatus("Understanding your destination…");
 
-    console.log("Submitted:", values.message);
-    console.log("Message:", values.message);
-    console.log("File:", selectedFile);
+    console.log("Submitted message:", values.message);
+    console.log("Selected file:", selectedFile);
 
     try {
       // 1) LLM → Extract destination, dates, style, etc.
@@ -167,6 +192,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
       setGeneratedData(finalItinerary); 
       form.reset();
+      setSelectedFile(null); // clear file after success
     } catch (err) {
       console.error("Error generating itinerary:", err);
       setError("Failed to generate itinerary. Please try again with a different location or description.");
@@ -194,6 +220,10 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
   fileInputRef.current?.click();
 };
 
+const removeFile = () => {
+    setSelectedFile(null);
+  };
+
   return (
     <div className="w-full max-w-sm md:max-w-lg mt-4">
       <Form {...form}>
@@ -204,85 +234,148 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormControl>
-                    {/* Main Input Container - Improved ChatGPT-like styling with better background and contrast */}
-                    <div className="flex flex-col gap-3 rounded-xl border border-border bg-background/95 backdrop-blur-sm p-4 shadow-md ring-1 ring-border/50">
-                      
-                      {/* 📎 File/Image Preview - Inside the input box, above the + button and textarea */}
-                      {selectedFile && (
-                        <div className="flex flex-wrap gap-3 -mb-2">
-                          {selectedFile.type.startsWith('image/') ? (
-                            // Image preview
-                            <div className="relative group inline-block">
-                              <img
-                                src={URL.createObjectURL(selectedFile)}
-                                alt={selectedFile.name}
-                                className="max-h-32 rounded-lg object-cover border border-border bg-background shadow-sm"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => setSelectedFile(null)}
-                                className="absolute -top-2 -right-2 bg-background/90 backdrop-blur-sm rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+                  {/* Main Input Container - Improved ChatGPT-like styling with better background and contrast */}
+                  <div className="flex flex-col gap-3 rounded-xl border border-border bg-background/95 backdrop-blur-sm p-4 shadow-md ring-1 ring-border/50">
+                    {/* 📎 File/Image Preview - Inside the input box, above the + button and textarea */}
+                    {selectedFile && (
+                      <div className="flex flex-wrap gap-3 -mb-2">
+                        {selectedFile.type.startsWith("image/") ? (
+                          // Image preview
+                          <div className="relative group inline-block">
+                            <img
+                              src={URL.createObjectURL(selectedFile)}
+                              alt={selectedFile.name}
+                              className="max-h-32 rounded-lg object-cover border border-border bg-background shadow-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setSelectedFile(null)}
+                              className="absolute -top-2 -right-2 bg-background/90 backdrop-blur-sm rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+                            >
+                              <svg
+                                className="h-4 w-4 text-foreground"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
                               >
-                                <svg className="h-4 w-4 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                            </div>
-                          ) : (
-                            // Document/file preview
-                            <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 text-sm">
-                              <svg className="h-8 w-8 text-muted-foreground flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2-2z" />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
                               </svg>
-                              <span className="truncate max-w-xs text-foreground">{selectedFile.name}</span>
-                              <button
-                                type="button"
-                                onClick={() => setSelectedFile(null)}
-                                className="ml-4 text-muted-foreground hover:text-foreground transition-colors"
+                              {/* <X className="h-4 w-4 text-black" /> */}
+                            </button>
+                          </div>
+                        ) : (
+                          // Document/file preview
+                          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 text-sm">
+                            <svg
+                              className="h-8 w-8 text-muted-foreground flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2-2z"
+                              />
+                            </svg>
+                            <span className="truncate max-w-xs text-foreground">
+                              {selectedFile.name}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedFile(null)}
+                              className="ml-4 text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              <svg
+                                className="h-5 w-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
                               >
-                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Bottom row: + button + Textarea */}
-                      <div className="flex justify-center items-center gap-3">
-                        {/* ➕ Upload Button */}
-                        <button
-                          type="button"
-                          onClick={triggerFilePicker}
-                          disabled={isLoading}
-                          className="p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          aria-label="Upload file"
-                        >
-                          <Plus className="h-6 w-6 text-muted-foreground" />
-                        </button>
-
-                        {/* Hidden file input */}
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          className="hidden"
-                          onChange={handleFileSelect}
-                          accept=".pdf,.txt,.doc,.docx,.png,.jpg,.jpeg"
-                        />
-
-                        {/* Textarea */}
-                        <Textarea
-                          className="flex-1 min-h-12 max-h-48 border-0 bg-transparent resize-none focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground placeholder:text-muted-foreground shadow-none outline-none"
-                          placeholder="Eg. I want to go to Chitwan for a romantic getaway..."
-                          disabled={isLoading}
-                          {...field}
-                          onKeyDown={handleKeyDown}
-                        />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                </FormControl>
+                    )}
 
+                  {/* Dropzone Area + Textarea Row */}
+                    {/* Bottom row: + button + Textarea */}
+                    {/* <div {...getRootProps()} className="flex justify-center items-center gap-3 "> */}
+                      <div
+                        {...getRootProps()}
+                        className={`flex items-center gap-3 ${
+                          isDragActive
+                            ? "ring-2 ring-blue-500 ring-offset-2"
+                            : ""
+                        } rounded-lg transition-all`}
+                      >
+                        <input {...getInputProps()} />
+
+                      {/* Upload Button (still visible for click) */}
+                      <button
+                        type="button"
+                        disabled={isLoading}
+                        className="p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        aria-label="Upload file"
+                      >
+                        {isDragActive ? (
+                          <UploadCloud className="h-6 w-6 text-blue-600" />
+                        ) : (
+                          <Plus className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </button>
+                      {/* ➕ Upload Button */}
+                      {/* <button
+                        type="button"
+                        onClick={triggerFilePicker}
+                        disabled={isLoading}
+                        className="p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Upload file"
+                      >
+                        <Plus className="h-6 w-6 text-muted-foreground" />
+                      </button> */}
+
+                      {/* Hidden file input */}
+                      {/* <input
+                        ref={fileInputRef}
+                        type="file"
+                        className="hidden"
+                        onChange={handleFileSelect}
+                        accept=".pdf,.txt,.doc,.docx,.png,.jpg,.jpeg"
+                      /> */}
+
+                      {/* Textarea */}
+                      <Textarea
+                        className="flex-1 min-h-12 max-h-48 border-0 bg-transparent resize-none focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground placeholder:text-muted-foreground shadow-none outline-none"
+                        placeholder="Eg. I want to go to Chitwan for a romantic getaway..."
+                        disabled={isLoading}
+                        {...field}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
+                    
+                    {/* Optional helper text when dragging */}
+                    {isDragActive && (
+                      <p className="text-sm text-blue-600 text-center -mt-2">
+                        Drop the file here...
+                      </p>
+                    )}
+
+                  </div>
+                </FormControl>
               </FormItem>
             )}
           />
