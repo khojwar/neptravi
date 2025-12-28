@@ -53,7 +53,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".gif"],
@@ -67,6 +67,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
     maxFiles: 1,
     multiple: false,
     disabled: isLoading,
+    noClick: true, // 🔑 IMPORTANT
   });
 
   const onSubmit = async (values: userQueryData) => {
@@ -323,17 +324,16 @@ const removeFile = () => {
                     {/* <div {...getRootProps()} className="flex justify-center items-center gap-3 "> */}
                       <div
                         {...getRootProps()}
-                        className={`flex items-center gap-3 ${
-                          isDragActive
-                            ? "ring-2 ring-blue-500 ring-offset-2"
-                            : ""
-                        } rounded-lg transition-all`}
+                        className={`flex items-center gap-3 rounded-lg transition-all ${
+                          isDragActive ? "ring-2 ring-blue-500 ring-offset-2" : ""
+                        }`}
                       >
                         <input {...getInputProps()} />
 
                       {/* Upload Button (still visible for click) */}
                       <button
                         type="button"
+                        onClick={open}   // 👈 manually open picker
                         disabled={isLoading}
                         className="p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                         aria-label="Upload file"
