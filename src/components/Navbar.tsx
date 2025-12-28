@@ -48,7 +48,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center fixed top-4 left-0 right-0 z-50 text-white mx-4 md:max-w-3xl md:mx-auto lg:max-w-7xl">
       <h1 className="flex gap-2 font-bold">
-        <span className="md:hidden">
+        <span className="md:hidden text-gray-300">
           <MobileMenu />
         </span>
         <Link href="/" className='text-gray-300'>NEPTRAVI</Link>

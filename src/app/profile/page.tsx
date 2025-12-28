@@ -118,7 +118,7 @@ const ProfilePage = () => {
   )}
 
   return (
-    <div className="max-w-7xl mx-auto mt-20 ">
+    <div className="px-4 md:px-0 md:max-w-3xl lg:max-w-7xl mx-auto mt-20 ">
       <h1 className="text-2xl mb-4 font-semibold">
         {session
           ? `Welcome, ${session.user?.name}!`
@@ -153,7 +153,7 @@ const ProfilePage = () => {
       {loadingProducts ? (
         <ProductSkeletonGrid />
       ) : (
-        <ul className="grid grid-cols-4 gap-4 text-sm">
+        <ul className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
           {products.map((product) => (
             <li key={product.id}>
               <ProductCard {...product} />
