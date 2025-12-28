@@ -81,12 +81,17 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
 
     try {
       // 1) LLM → Extract destination, dates, style, etc.
-      const userQuery = await extractTripDetailsWithLLM(values.message);
+      const userQuery = await extractTripDetailsWithLLM(values.message, selectedFile || undefined);
       console.log("userQuery: ", userQuery);
       
       if (userQuery.error) {
         console.error("Error extracting trip details:", userQuery.error);
-        setError("Could not understand your destination. Please provide a valid location or city name.");
+        
+        setError(
+          userQuery.error ||
+            "Could not understand your destination. Please provide a valid location or city name."
+        );
+        
         setIsLoading(false);
         return;
       }
@@ -110,6 +115,7 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
         } else {
           // Location not found
           setError(`Location "${userQuery.destination}" could not be found. Please try another destination or check the spelling.`);
+          
           setIsLoading(false);
           return;
         }
@@ -129,9 +135,10 @@ const UserQuery = ({ onItineraryGenerated }: UserQueryProps) => {
       // 3) LLM → Generate full final itinerary
       setStatus("Generating itinerary…");
       const stream = await streamFullItineraryWithLLM({
-        userQuery,
-        weatherData,
-      });
+            userQuery,
+            weatherData,
+            file: selectedFile || undefined, // Pass the file
+          });
 
 
       let fullText = "";
